@@ -19,7 +19,7 @@ export default function Home(){
                 </button>
                 <h2 className="text-white text-xl">Sales Flow</h2>
             </header>
-            {isSideBarVisible ? <SideBar setSelectedSection={setSelectedSection}/> : null}
+            {isSideBarVisible ? <SideBar switchSideBar={switchSideBar} setSelectedSection={setSelectedSection}/> : null}
             <main>
                 {<SelectedSection/>}
             </main>

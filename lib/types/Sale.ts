@@ -5,5 +5,6 @@ export interface ISale {
      status: 'Pending' | 'Completed' | 'Lost',
      desc: string,
      clientId: number,
-     productId: number
+     productId: number,
+     createdAt: string     
 }

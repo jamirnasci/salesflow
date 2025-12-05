@@ -19,3 +19,13 @@ export async function POST(req: NextRequest) {
         return Response.json({ msg: 'Falha ao cadastrar venda' }, { status: 500 })
     }
 }
+
+export async function GET(req: NextRequest) {
+    try {
+        const sales = await Sale.findAll()
+        return Response.json(sales, { status: 200 })
+    } catch (error) {
+        console.log(`findall sale erro ${error}`)
+        return Response.json({ msg: 'Falha ao carregar vendas' }, { status: 500 })
+    }
+}

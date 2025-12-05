@@ -26,7 +26,7 @@ interface SaleFormData {
     totalSale: number; // Calculado
 }
 
-const SaleForm: React.FC = () => {
+const NewSaleSection: React.FC = () => {
     useEffect(() => {
         const loadProducts = async () => {
             const result = await fetch('/api/product', {
@@ -237,4 +237,4 @@ const SaleForm: React.FC = () => {
     );
 };
 
-export default SaleForm;
+export default NewSaleSection;
