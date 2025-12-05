@@ -1,3 +1,7 @@
+'use client'
+
+import { IClient } from '@/lib/types/Client';
+import { IProduct } from '@/lib/types/Product';
 import React, { useState, useEffect } from 'react';
 
 // Interfaces mockadas para dropdowns
@@ -22,20 +26,26 @@ interface SaleFormData {
     totalSale: number; // Calculado
 }
 
-// Dados Mockados para os Selects
-const MOCK_CLIENTS: Client[] = [
-    { idclient: 101, name: 'Ana Silva' },
-    { idclient: 102, name: 'Bruno Costa' },
-    { idclient: 103, name: 'Carla Dias' },
-];
-
-const MOCK_PRODUCTS: Product[] = [
-    { idproduct: 1, name: 'Notebook Gamer X', price: 5999.90 },
-    { idproduct: 2, name: 'Mouse Sem Fio', price: 89.50 },
-    { idproduct: 3, name: 'Monitor Ultrawide 34"', price: 2150.00 },
-];
-
 const SaleForm: React.FC = () => {
+    useEffect(() => {
+        const loadProducts = async () => {
+            const result = await fetch('/api/product', {
+
+            })
+            const products: IProduct[] = await result.json()
+            setProducts(products)
+        }
+        loadProducts()
+        const loadClients = async () => {
+            const result = await fetch('/api/client')
+            const clients: IClient[] = await result.json()
+            console.log(clients)
+            setClients(clients)
+        }
+        loadClients()
+    }, [])
+    const [clients, setClients] = useState<IClient[]>([])
+    const [products, setProducts] = useState<IProduct[]>([])
     const [formData, setFormData] = useState<SaleFormData>({
         clientId: '',
         productId: '',
@@ -47,7 +57,7 @@ const SaleForm: React.FC = () => {
 
     // Efeito para recalcular o total da venda sempre que o produto ou quantidade mudar
     useEffect(() => {
-        const selectedProduct = MOCK_PRODUCTS.find(p => p.idproduct === Number(formData.productId));
+        const selectedProduct = products.find(p => p.idproduct === Number(formData.productId));
         const items = Number(formData.totalItems);
 
         if (selectedProduct && items > 0) {
@@ -76,18 +86,20 @@ const SaleForm: React.FC = () => {
     };
 
     // Manipulador de envio do formulário
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // Finaliza os dados antes de enviar (garantindo que o totalSale esteja incluído)
-        const finalData = { ...formData, totalSale: formData.totalSale };
-
-        console.log('Dados da Venda a serem cadastrados:', finalData);
-        // TODO: Adicionar lógica para chamar a API /sales
-        alert(`Venda registrada! Total: R$ ${finalData.totalSale.toFixed(2).replace('.', ',')}`);
-
-        // Opcional: Resetar o formulário
-        // setFormData({ clientId: '', productId: '', totalItems: 1, status: 'Pending', desc: '', totalSale: 0 });
+        const result = await fetch('/api/sale', {
+            method: 'POST',
+            headers:{
+                'Content-type': 'application/json'
+            },
+            body:JSON.stringify(formData)
+        })
+        if(result.ok){
+            alert('Venda cadastrada com sucesso')
+        }else{
+            alert('Falha ao cadastrar venda')
+        }
     };
 
     return (
@@ -117,7 +129,7 @@ const SaleForm: React.FC = () => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white focus:ring-sky-500 focus:border-sky-500 appearance-none"
                         >
                             <option value="">Selecione um Cliente</option>
-                            {MOCK_CLIENTS.map(client => (
+                            {clients.map(client => (
                                 <option key={client.idclient} value={client.idclient}>
                                     {client.name} (ID: {client.idclient})
                                 </option>
@@ -139,9 +151,9 @@ const SaleForm: React.FC = () => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white focus:ring-sky-500 focus:border-sky-500 appearance-none"
                         >
                             <option value="">Selecione um Produto</option>
-                            {MOCK_PRODUCTS.map(product => (
+                            {products.map(product => (
                                 <option key={product.idproduct} value={product.idproduct}>
-                                    {product.name} (R$ {product.price.toFixed(2).replace('.', ',')})
+                                    {product.name} (R$ {Number(product.price).toFixed(2).replace('.', ',')})
                                 </option>
                             ))}
                         </select>

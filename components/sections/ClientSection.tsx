@@ -1,27 +1,53 @@
-import React, { useState } from 'react';
+'use client'
 
-// Define a interface do cliente (refletindo a sua entidade)
-interface Client {
-  idclient: number;
-  name: string;
-  cpf: string;
-  email: string;
-  phone: string;
-}
-
-// Dados mockados para simular a listagem de clientes
-const MOCK_CLIENTS: Client[] = [
-  { idclient: 101, name: 'Ana Silva', cpf: '123.456.789-00', email: 'ana.silva@email.com', phone: '(11) 98765-4321' },
-  { idclient: 102, name: 'Bruno Costa', cpf: '987.654.321-11', email: 'bruno.c@outro.com', phone: '(21) 99887-7665' },
-  { idclient: 103, name: 'Carla Dias', cpf: '456.789.123-22', email: 'carla.dias@exemplo.com', phone: '(31) 97766-5544' },
-  { idclient: 104, name: 'Daniel Souza', cpf: '789.123.456-33', email: 'daniel.s@mail.com', phone: '(41) 96655-4433' },
-];
+import React, { useEffect, useState } from 'react';
+import Modal from '../Modal';
+import ClientForm from '../forms/ClientForm';
+import { IClient } from '@/lib/types/Client';
+import { UpdateClientForm } from '../forms/update/UpdateClientForm';
 
 const ClientSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [clients, setClients] = useState<IClient[]>([])
+  const [selectedClient, setSelectedClient] = useState<IClient>()
+  const [isEditModalVisible, setEditModalVisible] = useState(false)
+
+  const switchModal = () => {
+    setModalVisible(!isModalVisible)
+  }
+
+  const switchEditModal = () => {
+    setEditModalVisible(!isEditModalVisible)
+  }
+
+  const deleteHandle = async (id: number, name: string) => {
+    if (!confirm(`Deseja realmente remover ${name}?`)) {
+      return
+    }
+    const result = await fetch(`/api/client/${id}`, {
+      method: 'DELETE'
+    })
+    if (result.ok) {
+      alert('Cliente removido com sucesso')
+    } else {
+      alert('Falha ao remover cliente')
+    }
+  }
+
+  useEffect(() => {
+    const loadClients = async () => {
+      const result = await fetch('/api/client')
+      const clients: IClient[] = await result.json()
+      console.log(clients)
+      setClients(clients)
+    }
+    loadClients()
+  }, [])
+
   // Lógica de filtragem: filtra os clientes pelo nome ou CPF
-  const filteredClients = MOCK_CLIENTS.filter((client) =>
+  const filteredClients = clients.filter((client) =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.cpf.includes(searchTerm) // Permite pesquisa direta pelo CPF
   );
@@ -41,7 +67,7 @@ const ClientSection: React.FC = () => {
 
       {/* --- Cabeçalho: Pesquisa e Botão Criar --- */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-        
+
         {/* Barra de Pesquisa */}
         <div className="w-full sm:w-1/3 relative">
           <input
@@ -59,7 +85,7 @@ const ClientSection: React.FC = () => {
 
         {/* Botão Criar Cliente */}
         <button
-          onClick={handleCreateClient}
+          onClick={() => switchModal()}
           className="w-full sm:w-auto flex items-center justify-center bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
           <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -116,10 +142,13 @@ const ClientSection: React.FC = () => {
                     {client.phone}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                    <a href={`/clients/edit/${client.idclient}`} className="text-green-600 hover:text-green-900 mr-4">
+                    <button className="text-green-600 hover:text-green-900 mr-4" onClick={() => {
+                      setSelectedClient(client)
+                      switchEditModal()
+                    }}>
                       Editar
-                    </a>
-                    <button onClick={() => console.log(`Deletar cliente ${client.idclient}`)} className="text-red-600 hover:text-red-900">
+                    </button>
+                    <button onClick={() => deleteHandle(client.idclient, client.name)} className="text-red-600 hover:text-red-900">
                       Deletar
                     </button>
                   </td>
@@ -135,7 +164,8 @@ const ClientSection: React.FC = () => {
           </tbody>
         </table>
       </div>
-      
+      {isModalVisible ? <Modal title='Cadastrar cliente' Node={<ClientForm />} setModalVisible={switchModal} /> : null}
+      {isEditModalVisible ? <Modal title='Editar cliente' Node={<UpdateClientForm client={selectedClient!!} />} setModalVisible={switchEditModal} /> : null}
     </div>
   );
 };

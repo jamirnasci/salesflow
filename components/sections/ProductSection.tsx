@@ -47,8 +47,6 @@ const ProductSection: React.FC = () => {
 
             })
             const products: IProduct[] = await result.json()
-            console.log(products)
-            console.log(filteredProducts)
             setProducts(products)
         }
         loadProducts()

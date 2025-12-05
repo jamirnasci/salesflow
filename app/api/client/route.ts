@@ -1,21 +1,32 @@
 import { sequelize} from "@/lib/config/DB";
 import { syncDB } from "@/lib/config/sync";
+import { Client } from "@/lib/models/Client";
+import { IClient } from "@/lib/types/Client";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-    await syncDB()
     try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
+        const clients = await Client.findAll()
+        return Response.json(clients, {status: 200})
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.log(`findall clients error ${error}`)
+        return Response.json({}, {status: 500})
     }
-    return Response.json({ msg: "ok" });
-
 }
 
 export async function POST(req: Request) {
-    console.log(req.body)
-    return Response.json('ok')
+    try {
+        const client: IClient = await req.json()
+        const result = await Client.create({
+            name: client.name,
+            cpf: client.phone,
+            email: client.email,
+            phone: client.phone
+        })
+        return Response.json({msg: 'Cliente cadastrado com sucesso'}, {status: 200})
+    } catch (error) {
+        console.log(`create client error ${error}`)
+        return Response.json({msg: 'Falha ao cadastrar cliente'}, {status: 500})
+    }
 }
