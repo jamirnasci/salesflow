@@ -3,6 +3,7 @@
 import UserForm from '@/components/forms/UserForm';
 import Modal from '@/components/Modal';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 // import { useRouter } from 'next/navigation'; // Descomente em um projeto Next.js real
@@ -45,6 +46,7 @@ const LoginPage: React.FC = () => {
 
           {/* --- Cabeçalho --- */}
           <div className="text-center mb-8">
+            <img src="/img/salesflow.png" alt="" />          
             <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
               SalesFlow
             </h1>

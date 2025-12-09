@@ -35,13 +35,10 @@ export default function ProductForm() {
       headers: {
         'Content-type': 'application/json'
       },
-      body:JSON.stringify(formData)
+      body: JSON.stringify(formData)
     })
-    if(result.ok){
-      alert('Produto cadastrado')
-    }else{
-      alert('Falha ao cadastrar produto')
-    }
+    const obj = await result.json()
+    alert(obj.msg)
   };
 
   return (

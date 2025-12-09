@@ -11,11 +11,11 @@ interface ClientFormData {
   phone: string;
 }
 
-interface UpdateClientFormProps{
-    client: IClient
+interface UpdateClientFormProps {
+  client: IClient
 }
 
-export function UpdateClientForm (props: UpdateClientFormProps){
+export function UpdateClientForm(props: UpdateClientFormProps) {
   const [formData, setFormData] = useState<ClientFormData>({
     name: props.client.name,
     cpf: props.client.cpf,
@@ -26,9 +26,9 @@ export function UpdateClientForm (props: UpdateClientFormProps){
   // Manipulador de mudança para atualizar o estado
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     // Você pode adicionar lógica de formatação aqui (ex: máscara para CPF/Telefone)
-    
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -38,19 +38,16 @@ export function UpdateClientForm (props: UpdateClientFormProps){
   // Manipulador de envio do formulário (você deve adicionar a lógica de API aqui)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    const result = await fetch(`/api/client/${props.client.idclient}`,{
-        method: 'PUT',
-        headers:{
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+
+    const result = await fetch(`/api/client/${props.client.idclient}`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(formData)
     })
-    if(result.ok){
-        alert('Cliente atualizado com sucesso')
-    }else{
-        alert('Falha ao atualizar cliente')
-    }
+    const obj = await result.json()
+    alert(obj.msg)
   };
 
   return (

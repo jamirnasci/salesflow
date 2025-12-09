@@ -29,11 +29,8 @@ const ClientSection: React.FC = () => {
     const result = await fetch(`/api/client/${id}`, {
       method: 'DELETE'
     })
-    if (result.ok) {
-      alert('Cliente removido com sucesso')
-    } else {
-      alert('Falha ao remover cliente')
-    }
+    const obj = await result.json()
+    alert(obj.msg)
   }
 
   useEffect(() => {

@@ -18,22 +18,19 @@ const ProductSection: React.FC = () => {
         setModalVisible(!isModalVisible)
     }
 
-    const switchEditModal = ()=>{
+    const switchEditModal = () => {
         setEditModalVisible(!isEditModalVisible)
     }
 
-    const deleteHandle = async (id: number)=>{
-        if(!confirm('Deseja realmente remover esse produto ?')){
+    const deleteHandle = async (id: number) => {
+        if (!confirm('Deseja realmente remover esse produto ?')) {
             return
         }
         const result = await fetch(`/api/product/${id}`, {
             method: 'DELETE'
         })
-        if(result.ok){
-            alert('Produto removido com sucesso')
-        }else{
-            alert('Falha ao remover produto')
-        }
+        const obj = await result.json()
+        alert(obj.msg)
     }
 
     // Lógica de filtragem: filtra os produtos pelo nome
@@ -137,7 +134,7 @@ const ProductSection: React.FC = () => {
                                         {product.quantity}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                        <button onClick={()=> {                                            
+                                        <button onClick={() => {
                                             setSelectedProduct(product)
                                             switchEditModal()
                                         }} className="text-indigo-600 hover:text-indigo-900 mr-4">
@@ -159,8 +156,8 @@ const ProductSection: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-            {isModalVisible ? <Modal title={"Cadastrar Produto"} Node={<ProductForm/>} setModalVisible={switchModal} /> : null}
-            {isEditModalVisible ? <Modal title={"Editar Produto"} Node={<UpdateProductForm product={selectedProduct}/>} setModalVisible={switchEditModal} /> : null}
+            {isModalVisible ? <Modal title={"Cadastrar Produto"} Node={<ProductForm />} setModalVisible={switchModal} /> : null}
+            {isEditModalVisible ? <Modal title={"Editar Produto"} Node={<UpdateProductForm product={selectedProduct} />} setModalVisible={switchEditModal} /> : null}
         </div>
     );
 };

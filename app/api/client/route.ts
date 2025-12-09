@@ -20,6 +20,14 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const client: IClient = await req.json()
+        const findCpf = await Client.findAll({
+            where:{
+                cpf: client.cpf
+            }
+        })
+        if(findCpf.length > 0){
+            return Response.json({msg: 'Já existe um cliente cadastrado com esse CPF'}, {status: 401})
+        }
         const result = await Client.create({
             name: client.name,
             cpf: client.phone,

@@ -28,11 +28,8 @@ const SaleSection: React.FC = () => {
         const result = await fetch(`/api/sale/${id}`, {
             method: 'DELETE'
         })
-        if (result.ok) {
-            alert('Venda removido com sucesso')
-        } else {
-            alert('Falha ao remover venda')
-        }
+        const obj = await result.json()
+        alert(obj.msg)
     }
 
     // Lógica de filtragem: filtra os produtos pelo nome
@@ -121,7 +118,7 @@ const SaleSection: React.FC = () => {
                             filteredSales.map((sale) => (
                                 <tr key={sale.idsale} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        { new Date(sale.createdAt).toLocaleDateString('pt-br')}
+                                        {new Date(sale.createdAt).toLocaleDateString('pt-br')}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {sale.status}

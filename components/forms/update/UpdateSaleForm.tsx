@@ -102,14 +102,8 @@ export function UpdateSaleForm({ sale }: UpdateSaleFormProps) {
                 body: JSON.stringify(formData) // Enviamos APENAS os dados editáveis
             })
 
-            if (result.ok) {
-                // Use modal ou notificação em vez de alert
-                alert(`Venda ID ${sale.idsale} atualizada com sucesso!`);
-            } else {
-                const errorData = await result.json();
-                setError(errorData.msg || 'Falha desconhecida ao atualizar venda.');
-                alert(`Falha ao atualizar venda: ${errorData.msg || 'Erro de API'}`);
-            }
+            const obj = await result.json()
+            alert(obj.msg)
         } catch (err) {
             setError('Erro de rede. Verifique sua conexão.');
             alert('Erro de rede ou servidor.');

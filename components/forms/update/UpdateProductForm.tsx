@@ -37,10 +37,9 @@ export default function UpdateProductForm(props: UpdateProductFormProps) {
 
     if (!props.product?.idproduct) {
       console.error("Produto inválido:", props.product);
-      return; // ✅ BLOQUEIA o fetch com undefined
+      return;
     }
 
-    console.log(formData)
     const result = await fetch(`/api/product/${props.product?.idproduct}`, {
       method: 'PUT',
       headers: {
@@ -48,11 +47,8 @@ export default function UpdateProductForm(props: UpdateProductFormProps) {
       },
       body: JSON.stringify(formData)
     })
-    if (result.ok) {
-      alert('Produto atualizado !')
-    } else {
-      alert('Falha ao atualizar produto')
-    }
+    const obj = await result.json()
+    alert(obj.msg)
   };
 
   return (

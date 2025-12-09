@@ -41,11 +41,8 @@ const ClientForm: React.FC = () => {
         },
         body: JSON.stringify(formData)
     })
-    if(result.ok){
-        alert('Cliente cadastrado com sucesso')
-    }else{
-        alert('Falha ao cadastrar cliente')
-    }
+    const obj = await result.json()
+    alert(obj.msg)
   };
 
   return (

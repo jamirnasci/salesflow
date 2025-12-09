@@ -95,11 +95,8 @@ const NewSaleSection: React.FC = () => {
             },
             body:JSON.stringify(formData)
         })
-        if(result.ok){
-            alert('Venda cadastrada com sucesso')
-        }else{
-            alert('Falha ao cadastrar venda')
-        }
+        const obj = await result.json()
+        alert(obj.msg)
     };
 
     return (
