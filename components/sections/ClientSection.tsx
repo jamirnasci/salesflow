@@ -5,6 +5,7 @@ import Modal from '../Modal';
 import ClientForm from '../forms/ClientForm';
 import { IClient } from '@/lib/types/Client';
 import { UpdateClientForm } from '../forms/update/UpdateClientForm';
+import { deleteClient } from '@/app/actions/clientActions/deleteClient';
 
 const ClientSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,11 +27,8 @@ const ClientSection: React.FC = () => {
     if (!confirm(`Deseja realmente remover ${name}?`)) {
       return
     }
-    const result = await fetch(`/api/client/${id}`, {
-      method: 'DELETE'
-    })
-    const obj = await result.json()
-    alert(obj.msg)
+    const result = await deleteClient(id)
+    alert(result.msg)
   }
 
   useEffect(() => {

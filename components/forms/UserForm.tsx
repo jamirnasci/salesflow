@@ -52,11 +52,8 @@ const UserForm: React.FC = () => {
         },
         body:JSON.stringify(dataToSubmit)
     })
-    if(result.ok){
-        alert('Usuário cadastrado com sucesso')
-    }else{
-        alert('Falha ao cadastrar usuário')
-    }
+    const obj = await result.json()
+    alert(obj.msg)
   };
 
   return (

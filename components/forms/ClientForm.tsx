@@ -1,17 +1,11 @@
 'use client'
 
-import React, { useState } from 'react';
-
-// Define a interface para o estado do formulário
-interface ClientFormData {
-  name: string;
-  cpf: string;
-  email: string;
-  phone: string;
-}
+import { createClient } from '@/app/actions/clientActions/createClient';
+import { IClient } from '@/lib/types/Client';
+import React, { FormEvent, useState } from 'react';
 
 const ClientForm: React.FC = () => {
-  const [formData, setFormData] = useState<ClientFormData>({
+  const [formData, setFormData] = useState<Partial<IClient>>({
     name: '',
     cpf: '',
     email: '',
@@ -30,20 +24,11 @@ const ClientForm: React.FC = () => {
     }));
   };
 
-  // Manipulador de envio do formulário (você deve adicionar a lógica de API aqui)
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    const result = await fetch('/api/client',{
-        method: 'POST',
-        headers:{
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    })
-    const obj = await result.json()
-    alert(obj.msg)
-  };
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+    const result = await createClient(formData)    
+    alert(result.msg)
+  }
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -82,7 +67,7 @@ const ClientForm: React.FC = () => {
               value={formData.cpf}
               onChange={handleChange}
               required
-              maxLength={14} // Incluindo pontos e traço (se você adicionar máscara)
+              maxLength={11} // Incluindo pontos e traço (se você adicionar máscara)
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               placeholder="000.000.000-00"
             />

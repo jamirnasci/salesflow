@@ -18,25 +18,5 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-    try {
-        const client: IClient = await req.json()
-        const findCpf = await Client.findAll({
-            where:{
-                cpf: client.cpf
-            }
-        })
-        if(findCpf.length > 0){
-            return Response.json({msg: 'Já existe um cliente cadastrado com esse CPF'}, {status: 401})
-        }
-        const result = await Client.create({
-            name: client.name,
-            cpf: client.phone,
-            email: client.email,
-            phone: client.phone
-        })
-        return Response.json({msg: 'Cliente cadastrado com sucesso'}, {status: 200})
-    } catch (error) {
-        console.log(`create client error ${error}`)
-        return Response.json({msg: 'Falha ao cadastrar cliente'}, {status: 500})
-    }
+
 }

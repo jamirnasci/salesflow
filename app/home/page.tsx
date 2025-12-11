@@ -2,7 +2,6 @@
 
 import LogoutButton from "@/components/LogoutButton";
 import ClientSection from "@/components/sections/ClientSection";
-import ProductSection from "@/components/sections/ProductSection";
 import SideBar from "@/components/SideBar";
 import { useState } from "react";
 

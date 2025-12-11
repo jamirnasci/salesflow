@@ -114,9 +114,7 @@ const LoginPage: React.FC = () => {
 
           {/* --- Links de Ajuda --- */}
           <div className="mt-6 text-center">
-            <a href="#" className="text-sm text-indigo-600 hover:text-indigo-500 font-medium">
-              Esqueceu sua senha?
-            </a>
+            {/* <a href="#" className="text-sm text-indigo-600 hover:text-indigo-500 font-medium">Esqueceu sua senha?</a> */}
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { updateClient } from '@/app/actions/clientActions/updateClient';
 import { IClient } from '@/lib/types/Client';
 import React, { useState } from 'react';
 
@@ -16,7 +17,7 @@ interface UpdateClientFormProps {
 }
 
 export function UpdateClientForm(props: UpdateClientFormProps) {
-  const [formData, setFormData] = useState<ClientFormData>({
+  const [formData, setFormData] = useState<Partial<IClient>>({
     name: props.client.name,
     cpf: props.client.cpf,
     email: props.client.email,
@@ -38,16 +39,10 @@ export function UpdateClientForm(props: UpdateClientFormProps) {
   // Manipulador de envio do formulário (você deve adicionar a lógica de API aqui)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const result = await fetch(`/api/client/${props.client.idclient}`, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    const obj = await result.json()
-    alert(obj.msg)
+        
+    formData.idclient = props.client.idclient
+    const result = await updateClient(formData)    
+    alert(result.msg)
   };
 
   return (
