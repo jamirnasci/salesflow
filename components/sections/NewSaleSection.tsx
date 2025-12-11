@@ -1,30 +1,10 @@
 'use client'
 
+import { createSale } from '@/app/actions/saleActions/createSale';
 import { IClient } from '@/lib/types/Client';
 import { IProduct } from '@/lib/types/Product';
+import { ISale } from '@/lib/types/Sale';
 import React, { useState, useEffect } from 'react';
-
-// Interfaces mockadas para dropdowns
-interface Client {
-    idclient: number;
-    name: string;
-}
-
-interface Product {
-    idproduct: number;
-    name: string;
-    price: number;
-}
-
-// Interface principal da Venda
-interface SaleFormData {
-    clientId: number | '';
-    productId: number | '';
-    totalItems: number | '';
-    status: 'Pending' | 'Completed' | 'Lost';
-    desc: string;
-    totalSale: number; // Calculado
-}
 
 const NewSaleSection: React.FC = () => {
     useEffect(() => {
@@ -46,9 +26,9 @@ const NewSaleSection: React.FC = () => {
     }, [])
     const [clients, setClients] = useState<IClient[]>([])
     const [products, setProducts] = useState<IProduct[]>([])
-    const [formData, setFormData] = useState<SaleFormData>({
-        clientId: '',
-        productId: '',
+    const [formData, setFormData] = useState<Partial<ISale>>({
+        clientId: -1,
+        productId: -1,
         totalItems: 1, // Valor inicial sugerido
         status: 'Pending',
         desc: '',
@@ -88,15 +68,12 @@ const NewSaleSection: React.FC = () => {
     // Manipulador de envio do formulário
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const result = await fetch('/api/sale', {
-            method: 'POST',
-            headers:{
-                'Content-type': 'application/json'
-            },
-            body:JSON.stringify(formData)
-        })
-        const obj = await result.json()
-        alert(obj.msg)
+        if(formData.clientId === -1 || formData.productId === -1){
+            alert('Por favor, selecione corretamente o cliente e produto')
+            return
+        }
+        const result = await createSale(formData)
+        alert(result.msg)
     };
 
     return (
@@ -202,7 +179,7 @@ const NewSaleSection: React.FC = () => {
                 <div className="mb-4 p-4 bg-sky-100 border border-sky-300 rounded-md">
                     <p className="text-sm font-semibold text-gray-700">Total da Venda (Calculado):</p>
                     <p className="text-2xl font-extrabold text-sky-700">
-                        R$ {formData.totalSale.toFixed(2).replace('.', ',')}
+                        R$ {formData.totalSale ? formData.totalSale.toFixed(2).replace('.', ',') : 0}
                     </p>
                 </div>
 

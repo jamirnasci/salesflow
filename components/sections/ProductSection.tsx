@@ -7,6 +7,7 @@ import ProductForm from "../forms/ProductForm";
 import React from 'react';
 import { IProduct } from "@/lib/types/Product";
 import UpdateProductForm from "../forms/update/UpdateProductForm";
+import { deleteProduct } from "@/app/actions/productActions/deleteProduct";
 
 const ProductSection: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,11 +27,8 @@ const ProductSection: React.FC = () => {
         if (!confirm('Deseja realmente remover esse produto ?')) {
             return
         }
-        const result = await fetch(`/api/product/${id}`, {
-            method: 'DELETE'
-        })
-        const obj = await result.json()
-        alert(obj.msg)
+        const result = await deleteProduct(id)
+        alert(result.msg)
     }
 
     // Lógica de filtragem: filtra os produtos pelo nome

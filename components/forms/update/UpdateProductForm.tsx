@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { IProduct } from '@/lib/types/Product'
+import { updateProduct } from '@/app/actions/productActions/updateProduct';
 // Define a interface para o estado do formulário, refletindo a sua entidade
 interface ProductFormData {
   name: string;
@@ -14,10 +15,10 @@ interface UpdateProductFormProps {
   product: IProduct | undefined
 }
 export default function UpdateProductForm(props: UpdateProductFormProps) {
-  const [formData, setFormData] = useState<ProductFormData>({
+  const [formData, setFormData] = useState<Partial<IProduct>>({
     name: props.product?.name || '',
-    price: props.product?.price || '',
-    quantity: props.product?.quantity || '',
+    price: props.product?.price || 0,
+    quantity: props.product?.quantity || 0,
     desc: props.product?.desc || '',
     img: props.product?.img || '',
   });
@@ -40,15 +41,9 @@ export default function UpdateProductForm(props: UpdateProductFormProps) {
       return;
     }
 
-    const result = await fetch(`/api/product/${props.product?.idproduct}`, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    const obj = await result.json()
-    alert(obj.msg)
+    formData.idproduct = props.product.idproduct
+    const result = await updateProduct(formData)
+    alert(result.msg)
   };
 
   return (

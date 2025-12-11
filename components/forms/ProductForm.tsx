@@ -1,19 +1,12 @@
+import { createProduct } from '@/app/actions/productActions/createProduct';
+import { IProduct } from '@/lib/types/Product';
 import React, { useEffect, useState } from 'react';
 
-// Define a interface para o estado do formulário, refletindo a sua entidade
-interface ProductFormData {
-  name: string;
-  price: number | ''; // Usamos '' para permitir que o campo de input esteja vazio
-  quantity: number | '';
-  desc: string;
-  img: string;
-}
-
 export default function ProductForm() {
-  const [formData, setFormData] = useState<ProductFormData>({
+  const [formData, setFormData] = useState<Partial<IProduct>>({
     name: '',
-    price: '',
-    quantity: '',
+    price: 0,
+    quantity: 0,
     desc: '',
     img: '',
   });
@@ -30,15 +23,8 @@ export default function ProductForm() {
   // Manipulador de envio do formulário (você deve adicionar a lógica de API aqui)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = await fetch('/api/product', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    const obj = await result.json()
-    alert(obj.msg)
+    const result = await createProduct(formData)
+    alert(result.msg)
   };
 
   return (

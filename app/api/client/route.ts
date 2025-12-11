@@ -16,7 +16,3 @@ export async function GET() {
         return Response.json({}, {status: 500})
     }
 }
-
-export async function POST(req: Request) {
-
-}

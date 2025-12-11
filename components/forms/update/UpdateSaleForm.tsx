@@ -4,12 +4,7 @@ import { IProduct } from "@/lib/types/Product";
 import { IClient } from "@/lib/types/Client"; // Assumindo que você tem uma interface para Client
 import { ISale } from "@/lib/types/Sale";
 import { useEffect, useState } from "react";
-
-// Estado que será EDITÁVEL na venda
-interface EditableSaleData {
-    status: 'Pending' | 'Completed' | 'Lost';
-    desc: string; // Mantendo a descrição editável para notas
-}
+import { updateSale } from "@/app/actions/saleActions/updateSale";
 
 // Props esperadas pelo componente
 interface UpdateSaleFormProps {
@@ -17,7 +12,7 @@ interface UpdateSaleFormProps {
 }
 
 export function UpdateSaleForm({ sale }: UpdateSaleFormProps) {
-    const [formData, setFormData] = useState<EditableSaleData>({
+    const [formData, setFormData] = useState<Partial<ISale>>({
         status: sale.status,
         desc: sale.desc,
     });
@@ -94,19 +89,11 @@ export function UpdateSaleForm({ sale }: UpdateSaleFormProps) {
         setError(null);
 
         try {
-            const result = await fetch(`/api/sale/${sale.idsale}`, {
-                method: 'PUT', // Usamos PATCH para atualizar parcialmente
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(formData) // Enviamos APENAS os dados editáveis
-            })
-
-            const obj = await result.json()
-            alert(obj.msg)
+            formData.idsale = sale.idsale
+            const result = await updateSale(formData)            
+            alert(result.msg)
         } catch (err) {
-            setError('Erro de rede. Verifique sua conexão.');
-            alert('Erro de rede ou servidor.');
+            console.log(err)
         } finally {
             setIsSubmitting(false);
         }

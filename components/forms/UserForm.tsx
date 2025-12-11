@@ -1,5 +1,6 @@
 'use client'
 
+import { createUser } from '@/app/actions/userActions/createUser';
 import React, { useState } from 'react';
 
 // Define a interface para o estado do formulário (sem iduser)
@@ -45,15 +46,8 @@ const UserForm: React.FC = () => {
     // 2. Coletar dados (excluindo confirmPassword)
     const { confirmPassword, ...dataToSubmit } = formData;
     
-    const result = await fetch('/api/user', {
-        method: 'POST',
-        headers:{
-            'Content-type': 'application/json'
-        },
-        body:JSON.stringify(dataToSubmit)
-    })
-    const obj = await result.json()
-    alert(obj.msg)
+    const result = await createUser(formData)    
+    alert(result.msg)
   };
 
   return (
