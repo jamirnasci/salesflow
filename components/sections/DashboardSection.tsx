@@ -205,7 +205,7 @@ const DashboardSection: React.FC = () => {
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <h1 className="text-4xl font-extrabold text-gray-900 mb-10">
-        Painel Gerencial (Dashboard) 🚀
+        Dashboard
       </h1>
 
       {/* --- Cartões de KPI --- */}

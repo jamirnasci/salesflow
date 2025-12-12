@@ -57,7 +57,7 @@ const ClientSection: React.FC = () => {
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <h1 className="text-4xl font-extrabold text-gray-900 mb-8">
-        Cadastro de Clientes 🧑‍🤝‍🧑
+        Cadastro de Clientes
       </h1>
 
       {/* --- Cabeçalho: Pesquisa e Botão Criar --- */}

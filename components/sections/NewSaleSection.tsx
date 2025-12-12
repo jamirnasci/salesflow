@@ -83,7 +83,7 @@ const NewSaleSection: React.FC = () => {
                 className="bg-white p-8 rounded-lg shadow-xl w-full max-w-[900px]"
             >
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-                    Registrar Nova Venda 💵
+                    Nova Venda
                 </h2>
 
                 {/* --- Cliente e Produto (Selects) --- */}

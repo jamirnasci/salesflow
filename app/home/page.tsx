@@ -13,9 +13,9 @@ export default function Home() {
     }
     return (
         <div>
-            <header className="flex justify-between h-[60px] z-10 items-center sticky top-0 bg-blue-600">
+            <header className="flex justify-between h-[60px] z-10 items-center sticky top-0 bg-blue-800">
                 <div className="flex items-center">
-                    <button className="text-white m-2" onClick={() => { switchSideBar() }}>
+                    <button className="text-white m-2 cursor-pointer" onClick={() => { switchSideBar() }}>
                         <i className="fa-solid fa-bars text-xl m-0"></i>
                     </button>
                     <h2 className="text-white text-xl">Sales Flow</h2>
